@@ -137,19 +137,31 @@ values
 (9, 'Earned', '2026-03-10', '2026-03-12', 'Rejected'),
 (10, 'Casual', '2026-03-15', '2026-03-16', 'Pending');
 
-insert into Timesheet
-(EmployeeID, WorkDate, HoursWorked, OvertimeHours)
-values
-(1, '2026-01-01', 8, 0),
-(2, '2026-01-01', 8, 1),
-(3, '2026-01-01', 8, 0),
-(4, '2026-01-01', 8, 2),
-(5, '2026-01-01', 8, 0),
-(6, '2026-01-01', 8, 1),
-(7, '2026-01-01', 8, 0),
-(8, '2026-01-01', 8, 2),
-(9, '2026-01-01', 8, 0),
-(10, '2026-01-01', 8, 1);
+delimiter //
+
+create procedure insert_timesheets()
+begin
+    declare i int default 1;
+
+    while i <= 200 do
+
+        insert into Timesheet
+        (EmployeeID, WorkDate, HoursWorked, OvertimeHours)
+        values (
+            mod(i - 1, 10) + 1,
+            date_add('2026-01-01', interval floor((i - 1) / 10) day),
+            8.00,
+            0.00
+        );
+
+        set i = i + 1;
+
+    end while;
+end //
+
+delimiter ;
+
+call insert_timesheets();
 
 insert into PerformanceReview
 (EmployeeID, ReviewerID, ReviewDate, Rating, Comments)
@@ -164,7 +176,6 @@ values
 (8, 4, '2026-03-08', 3, 'Needs improvement'),
 (9, 4, '2026-03-09', 5, 'Excellent results'),
 (10, 4, '2026-03-10', 4, 'Good performance');
-
 
 select *from plant;
 select *from department;
