@@ -183,3 +183,27 @@ select *from employee;
 select *from Timesheet;
 select *from performancereview;
 select *from leaverequest;
+
+-- Test UNIQUE constraint by inserting a duplicate email
+-- Expected: Duplicate entry error
+INSERT INTO Employee
+(FirstName, LastName, Email, DepartmentID, ManagerID, HireDate, Salary)
+VALUES
+('Test2', 'User2', 'testuser@gmail.com', 1, NULL, '2026-01-01', 30000);
+
+
+-- Test CHECK constraint by inserting a negative salary
+-- Expected: Check constraint error
+INSERT INTO Employee
+(FirstName, LastName, Email, DepartmentID, ManagerID, HireDate, Salary)
+VALUES
+('Bala', 'Kumar', 'bala_test@gmail.com', 1, NULL, '2026-01-01', -5000);
+
+
+-- Test FOREIGN KEY constraint using a non-existing EmployeeID
+-- Expected: Foreign key constraint error
+INSERT INTO LeaveRequest
+(EmployeeID, LeaveType, StartDate, EndDate, Status)
+VALUES
+(9999, 'Medical', '2026-03-01', '2026-03-02', 'Pending');
+
